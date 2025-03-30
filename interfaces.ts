@@ -37,6 +37,7 @@ export interface Snake {
 }
 
 export interface Room {
+    connections: number;
     id: string;
     players: Player[];
     nextPositionIndex: number;

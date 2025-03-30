@@ -23,7 +23,7 @@ const joinRoom = (playerId: string): void => {
     let roomName: string | undefined;
 
     for (const [name, room] of Object.entries(rooms)) {
-        if (room.players.length < 2 && !room.hasGameStarted) {
+        if (room.connections < 2 && !room.hasGameStarted) {
             roomName = name;
             break;
         }
@@ -32,6 +32,7 @@ const joinRoom = (playerId: string): void => {
     if (!roomName) {
         roomName = generateRoomName();
         rooms[roomName] = {
+            connections: 0,
             id: roomName,
             players: [],
             nextPositionIndex: 0,
@@ -41,6 +42,7 @@ const joinRoom = (playerId: string): void => {
         };
     }
     playersMap.set(playerId, roomName);
+    rooms[roomName].connections++
     console.log(`Client added to room: ${roomName}`);
 
 };
