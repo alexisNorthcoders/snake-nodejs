@@ -5,8 +5,8 @@ export const gameConfig = {
     foodStorage: 20,
     backgroundColour: 'black',
     backgroundNumber: 51,
-    scaleFactor: 20,
-    gridSize: 600 / 20,
+    scaleFactor: 15,
+    gridSize: 600 / 15,
     waitingRoom: {
         waitingRoomMessage: 'bla bla',
         backgroundColour: 'black'
@@ -28,8 +28,8 @@ export const generateFoodCoordinates = (): number[][] => {
     const coordinates: number[][] = [];
 
     for (let i = 0; i < gameConfig.foodStorage; i++) {
-        const x = Math.floor(Math.random() * gameConfig.scaleFactor) * gameConfig.gridSize + gameConfig.leftSectionSize;
-        const y = Math.floor(Math.random() * gameConfig.scaleFactor) * gameConfig.gridSize;
+        const x = Math.floor(Math.random() * gameConfig.scaleFactor);
+        const y = Math.floor(Math.random() * gameConfig.scaleFactor);
         coordinates.push([x, y, i]);
     }
 

@@ -16,8 +16,8 @@ export function updateSnake(snake: Snake, room: Room) {
 
             const newCoord =
                 [
-                    Math.floor(Math.random() * gameConfig.scaleFactor) * gameConfig.gridSize + gameConfig.leftSectionSize,
-                    Math.floor(Math.random() * gameConfig.scaleFactor) * gameConfig.gridSize,
+                    Math.floor(Math.random() * gameConfig.scaleFactor),
+                    Math.floor(Math.random() * gameConfig.scaleFactor),
                     i,
                 ];
             room.foodCoordinates[i] = newCoord;
@@ -43,22 +43,22 @@ export function updateSnake(snake: Snake, room: Room) {
         snake.tail[snake.size - 1] = { x: snake.x, y: snake.y };
     }
 
-    snake.x += snake.speed.x * gameConfig.gridSize;
-    snake.y += snake.speed.y * gameConfig.gridSize;
+    snake.x += snake.speed.x;
+    snake.y += snake.speed.y;
 
     const side = gameConfig.side;
     const leftSectionSize = gameConfig.leftSectionSize;
 
-    if (snake.x >= side + leftSectionSize) {
-        snake.x = 0 + leftSectionSize;
-    } else if (snake.x < 0 + leftSectionSize) {
-        snake.x = side + leftSectionSize;
+    if (snake.x >= gameConfig.scaleFactor) {
+        snake.x = 0;
+    } else if (snake.x < 0) {
+        snake.x = gameConfig.scaleFactor;
     }
 
-    if (snake.y >= side) {
+    if (snake.y >= gameConfig.scaleFactor) {
         snake.y = 0;
     } else if (snake.y < 0) {
-        snake.y = side;
+        snake.y = gameConfig.scaleFactor;
     }
 
     for (const segment of snake.tail) {

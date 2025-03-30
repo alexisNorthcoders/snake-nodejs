@@ -104,8 +104,8 @@ wss.on('connection', (ws: WebSocket, req: any) => {
                         name: player.name,
                         colours: player.colours,
                         snake: {
-                            x: 400,
-                            y: 200,
+                            x: 0,
+                            y: 0,
                             tail: [],
                             speed: { x: 1, y: 0 },
                             isDead: false,
@@ -117,8 +117,8 @@ wss.on('connection', (ws: WebSocket, req: any) => {
                     };
                     // set starting position
                     if (room.nextPositionIndex < startingPositions.length) {
-                        newPlayer.snake.x = startingPositions[room.nextPositionIndex].x * gameConfig.gridSize + gameConfig.leftSectionSize
-                        newPlayer.snake.y = startingPositions[room.nextPositionIndex].y * gameConfig.gridSize
+                        newPlayer.snake.x = startingPositions[room.nextPositionIndex].x
+                        newPlayer.snake.y = startingPositions[room.nextPositionIndex].y
                         room.nextPositionIndex++
                     }
                     room.aliveCount++
