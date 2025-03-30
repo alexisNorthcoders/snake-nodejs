@@ -12,11 +12,7 @@ export function startGameLoop(roomId: string) {
     }
 
     const gameInterval = setInterval(() => {
-        if (!room.hasGameStarted) {
-            console.log("Game not started");
-            return;
-        }
-
+      
         for (const player of room.players) {
             const snake = player.snake
             if (snake.isDead) {
