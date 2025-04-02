@@ -33,6 +33,7 @@ export function startGameLoop(roomId: string) {
             room.hasGameStarted = false
             room.aliveCount = 0
             console.log(`Room ${roomId} game is over.`);
+            room.players.forEach((player) => player.ws.send(JSON.stringify({ event: "gameover" })))
             clearInterval(gameInterval);
             return;
         }

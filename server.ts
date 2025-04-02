@@ -171,11 +171,12 @@ wss.on('connection', (ws: WebSocket, req: any) => {
 
         const index = rooms[roomName].players.findIndex(player => player.id === playerId);
         if (index !== -1) {
+            if (!rooms[roomName].players[index].snake.isDead && rooms[roomName].hasGameStarted) {
+                rooms[roomName].aliveCount--;
+            }
             rooms[roomName].players.splice(index, 1);
         }
-        if (rooms[roomName].hasGameStarted) {
-            rooms[roomName].aliveCount--;
-        }
+
 
         playersMap.delete(playerId);
         console.log(`Player ${playerId} disconnected. Removed from ${roomName}.`);
