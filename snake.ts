@@ -46,9 +46,6 @@ export function updateSnake(snake: Snake, room: Room) {
     snake.x += snake.speed.x;
     snake.y += snake.speed.y;
 
-    const side = gameConfig.side;
-    const leftSectionSize = gameConfig.leftSectionSize;
-
     if (snake.x >= gameConfig.scaleFactor) {
         snake.x = 0;
     } else if (snake.x < 0) {

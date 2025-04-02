@@ -39,6 +39,7 @@ const joinRoom = (playerId: string): void => {
             hasGameStarted: false,
             aliveCount: 0,
             foodCoordinates: generateFoodCoordinates(),
+            backgroundNumber: Math.floor(Math.random() * 51)
         };
     }
     playersMap.set(playerId, roomName);
@@ -83,6 +84,7 @@ wss.on('connection', (ws: WebSocket, req: any) => {
                 const direction = directionMap[key]
 
                 const snake = room.players.find(player => player.id === playerId)?.snake
+                if ((snake?.speed.x != 0 && direction.x != 0) || (snake?.speed.y != 0 && direction.y != 0)) return
 
                 if (snake) snake.speed = direction
 
@@ -124,6 +126,7 @@ wss.on('connection', (ws: WebSocket, req: any) => {
                     room.aliveCount++
                     room.players.push(newPlayer)
                     room.players.forEach((player) => player.ws.send(JSON.stringify({ event: "waitingRoomStatus", players: room.players })))
+                    gameConfig.backgroundNumber = room.backgroundNumber
                     ws.send(JSON.stringify({ event: "config", food: room.foodCoordinates, config: gameConfig }))
 
                     return
@@ -139,12 +142,23 @@ wss.on('connection', (ws: WebSocket, req: any) => {
 
                     return
                 }
-                else {
-                    ws.send('Unknown action');
+                if (parsedMessage.event === 'updatePlayer') {
+
+                    const roomName = playersMap.get(playerId);
+                    const room = rooms[roomName]
+
+                    const player = room.players.find(player => player.id === playerId)
+                    if (player) {
+                        player.colours.body = parsedMessage.player.colours.body
+                        player.colours.head = parsedMessage.player.colours.head
+                        player.colours.eyes = parsedMessage.player.colours.eyes
+
+                        room.players.forEach((player) => player.ws.send(JSON.stringify({ event: "waitingRoomStatus", players: room.players })))
+                        return
+                    }
                     return
                 }
             }
-
         } catch (error) {
             console.error('Error parsing message', error);
             ws.send('Error processing message');

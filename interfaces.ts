@@ -1,7 +1,7 @@
 import { WebSocket } from "ws";
 
 export interface Player {
-    colours?: {
+    colours: {
         body: string;
         head: string;
         eyes: string;
@@ -37,6 +37,7 @@ export interface Snake {
 }
 
 export interface Room {
+    backgroundNumber: number;
     connections: number;
     id: string;
     players: Player[];

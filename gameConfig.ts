@@ -4,7 +4,7 @@ export const gameConfig = {
     fps: 8,
     foodStorage: 20,
     backgroundColour: 'black',
-    backgroundNumber: 51,
+    backgroundNumber: Math.floor(Math.random()*51),
     scaleFactor: 15,
     gridSize: 600 / 15,
     waitingRoom: {
