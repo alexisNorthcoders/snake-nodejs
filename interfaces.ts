@@ -44,7 +44,7 @@ export interface Room {
     nextPositionIndex: number;
     hasGameStarted: boolean;
     aliveCount: number;
-    foodCoordinates: number[][];
+    foodCoordinates: any[][];
 }
 
 export type Rooms = { [roomName: string]: Room };

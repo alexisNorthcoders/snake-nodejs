@@ -4,7 +4,7 @@ export const gameConfig = {
     fps: 8,
     foodStorage: 20,
     backgroundColour: 'black',
-    backgroundNumber: Math.floor(Math.random()*51),
+    backgroundNumber: Math.floor(Math.random() * 51),
     scaleFactor: 15,
     gridSize: 600 / 15,
     waitingRoom: {
@@ -13,7 +13,7 @@ export const gameConfig = {
     }
 }
 
-export const startingPositions = [ {x:5, y:5}, {x:15, y:5}, {x:15, y:5}, {x:15,y: 15} ]
+export const startingPositions = [{ x: 5, y: 5 }, { x: 15, y: 5 }, { x: 15, y: 5 }, { x: 15, y: 15 }]
 
 const snakeConfig = {
     colours: {
@@ -24,13 +24,15 @@ const snakeConfig = {
     name: 'Server'
 }
 
-export const generateFoodCoordinates = (): number[][] => {
-    const coordinates: number[][] = [];
+export const generateFoodCoordinates = (): any[][] => {
+    const coordinates: any[][] = [];
+    const foodTypes = ['redApple', 'greenApple', 'yellowApple']
 
     for (let i = 0; i < gameConfig.foodStorage; i++) {
         const x = Math.floor(Math.random() * gameConfig.scaleFactor);
         const y = Math.floor(Math.random() * gameConfig.scaleFactor);
-        coordinates.push([x, y, i]);
+        const type = foodTypes[Math.floor(Math.random() * 3)]
+        coordinates.push([x, y, i, type]);
     }
 
     return coordinates;

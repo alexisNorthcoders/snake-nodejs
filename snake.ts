@@ -19,6 +19,7 @@ export function updateSnake(snake: Snake, room: Room) {
                     Math.floor(Math.random() * gameConfig.scaleFactor),
                     Math.floor(Math.random() * gameConfig.scaleFactor),
                     i,
+                    ['redApple', 'greenApple', 'yellowApple'][Math.floor(Math.random() * 3)]
                 ];
             room.foodCoordinates[i] = newCoord;
 
