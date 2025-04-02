@@ -26,12 +26,12 @@ const snakeConfig = {
 
 export const generateFoodCoordinates = (): any[][] => {
     const coordinates: any[][] = [];
-    const foodTypes = ['redApple', 'greenApple', 'yellowApple']
+    const foodTypes = ['redApple', 'greenApple', 'yellowApple', 'banana', 'cherry', 'chili', 'strawberry']
 
     for (let i = 0; i < gameConfig.foodStorage; i++) {
         const x = Math.floor(Math.random() * gameConfig.scaleFactor);
         const y = Math.floor(Math.random() * gameConfig.scaleFactor);
-        const type = foodTypes[Math.floor(Math.random() * 3)]
+        const type = foodTypes[Math.floor(Math.random() * 7)]
         coordinates.push([x, y, i, type]);
     }
 

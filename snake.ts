@@ -2,24 +2,39 @@ import { gameConfig } from "./gameConfig";
 import { Room, Snake } from "./interfaces";
 import { serverSnakeCollision } from "./server";
 
+type Fruit = 'redApple' | 'greenApple' | 'yellowApple' | 'chili' | 'strawberry' | 'banana' | 'cherry';
+
+type Food = [number, number, number, Fruit]
+
+const foodScore: Record<Fruit, number> = {
+    'redApple': 50,
+    'greenApple': 10,
+    'yellowApple': 100,
+    'chili': 700,
+    'strawberry': 1000,
+    'cherry': 30,
+    'banana': 500
+};
+
 export function updateSnake(snake: Snake, room: Room) {
     if (snake.isDead) {
         return;
     }
 
     for (let i = 0; i < room.foodCoordinates.length; i++) {
-        const food = room.foodCoordinates[i];
-        if (snake.x === food[0] && snake.y === food[1]) {
+        const food = room.foodCoordinates[i] as Food
+        const [x, y, index, type] = food
+        if (snake.x === x && snake.y === y) {
             snake.size++;
             snake.tail.push({ x: snake.x, y: snake.y });
-            snake.score += 50;
+            snake.score += foodScore[type];
 
             const newCoord =
                 [
                     Math.floor(Math.random() * gameConfig.scaleFactor),
                     Math.floor(Math.random() * gameConfig.scaleFactor),
                     i,
-                    ['redApple', 'greenApple', 'yellowApple'][Math.floor(Math.random() * 3)]
+                    ['redApple', 'greenApple', 'yellowApple', 'banana', 'cherry', 'chili', 'strawberry'][Math.floor(Math.random() * 7)]
                 ];
             room.foodCoordinates[i] = newCoord;
 
