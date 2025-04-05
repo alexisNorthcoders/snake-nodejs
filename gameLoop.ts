@@ -12,7 +12,7 @@ export function startGameLoop(roomId: string) {
     }
 
     const gameInterval = setInterval(() => {
-      
+
         for (const player of room.players) {
             const snake = player.snake
             if (snake.isDead) {
@@ -25,18 +25,18 @@ export function startGameLoop(roomId: string) {
 
         const message = {
             event: "snake_update_v2",
-            snakes: room.players.map((player)=> player.snake)
+            snakes: room.players.map((player) => player.snake)
         };
-        room.players.forEach((player) => player.ws.send(JSON.stringify(message)))
+        room.wsConnections.forEach((conn) => conn.send(JSON.stringify(message)))
 
         if (room.aliveCount <= 0 || room.players.length === 0) {
             room.hasGameStarted = false
             room.aliveCount = 0
             console.log(`Room ${roomId} game is over.`);
-            room.players.forEach((player) => player.ws.send(JSON.stringify({ event: "gameover" })))
+            room.wsConnections.forEach((conn) => conn.send(JSON.stringify({ event: "gameover" })))
             clearInterval(gameInterval);
             return;
         }
 
-    }, 1000/gameConfig.fps);
+    }, 1000 / gameConfig.fps);
 }

@@ -43,7 +43,7 @@ export function updateSnake(snake: Snake, room: Room) {
                 food: [newCoord],
             };
 
-            room.players.forEach((player) => player.ws.send(JSON.stringify(foodMessage)))
+            room.wsConnections.forEach((conn) => conn.send(JSON.stringify(foodMessage)))
 
             break;
         }

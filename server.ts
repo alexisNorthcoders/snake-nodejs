@@ -33,6 +33,7 @@ const joinRoom = (playerId: string): void => {
         roomName = generateRoomName();
         rooms[roomName] = {
             connections: 0,
+            wsConnections: [],
             id: roomName,
             players: [],
             nextPositionIndex: 0,
@@ -101,7 +102,6 @@ wss.on('connection', (ws: WebSocket, req: any) => {
 
                     const newPlayer: Player = {
                         id: player.id,
-                        ws,
                         type: "player",
                         name: player.name,
                         colours: player.colours,
@@ -123,9 +123,10 @@ wss.on('connection', (ws: WebSocket, req: any) => {
                         newPlayer.snake.y = startingPositions[room.nextPositionIndex].y
                         room.nextPositionIndex++
                     }
+                    room.wsConnections.push(ws)
                     room.aliveCount++
                     room.players.push(newPlayer)
-                    room.players.forEach((player) => player.ws.send(JSON.stringify({ event: "waitingRoomStatus", players: room.players })))
+                    room.wsConnections.forEach((conn) => conn.send(JSON.stringify({ event: "waitingRoomStatus", players: room.players })))
                     gameConfig.backgroundNumber = room.backgroundNumber
                     ws.send(JSON.stringify({ event: "config", food: room.foodCoordinates, config: gameConfig }))
 
@@ -136,7 +137,7 @@ wss.on('connection', (ws: WebSocket, req: any) => {
                     const room = rooms[roomName]
                     room.hasGameStarted = true
 
-                    room.players.forEach((player) => player.ws.send(JSON.stringify({ event: "startGame" })))
+                    room.wsConnections.forEach((conn) => conn.send(JSON.stringify({ event: "startGame" })))
 
                     startGameLoop(roomName)
 
@@ -153,7 +154,7 @@ wss.on('connection', (ws: WebSocket, req: any) => {
                         player.colours.head = parsedMessage.player.colours.head
                         player.colours.eyes = parsedMessage.player.colours.eyes
 
-                        room.players.forEach((player) => player.ws.send(JSON.stringify({ event: "waitingRoomStatus", players: room.players })))
+                        room.wsConnections.forEach((conn) => conn.send(JSON.stringify({ event: "waitingRoomStatus", players: room.players })))
                         return
                     }
                     return

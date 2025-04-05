@@ -9,7 +9,6 @@ export interface Player {
     id: string;
     name?: string;
     snake: Snake;
-    ws: WebSocket;
     type: string;
 }
 
@@ -38,6 +37,7 @@ export interface Snake {
 
 export interface Room {
     backgroundNumber: number;
+    wsConnections: WebSocket[];
     connections: number;
     id: string;
     players: Player[];
