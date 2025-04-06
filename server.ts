@@ -4,6 +4,7 @@ import { gameConfig, generateFoodCoordinates, startingPositions } from './gameCo
 import * as url from 'url';
 import { startGameLoop } from './gameLoop';
 import { Direction, directionMap } from './contants';
+import { verifyTokenWithAuthServer } from './auth';
 
 
 const wss = new WebSocketServer({ port: 4002, path: "/ws" });
@@ -49,21 +50,37 @@ const joinRoom = (playerId: string): void => {
 
 };
 
-wss.on('connection', (ws: WebSocket, req: any) => {
+wss.on('connection', async (ws: WebSocket, req: any) => {
 
-    const getPlayerIdFromUrl = (req: WebSocket) => {
+    const getParams = (req: WebSocket) => {
+
         const urlObj = url.parse(req.url!, true);
-        return urlObj.query.playerId as string;
+
+        const playerId = urlObj.query.player_id as string;
+        const accessToken = urlObj.query.access_token as string;
+
+        return { playerId, accessToken };
     };
 
-    const playerId = getPlayerIdFromUrl(req);
-    console.log(`Player ${playerId} connected.`);
+    const { playerId, accessToken } = getParams(req);
+
     if (!playerId) {
         ws.close(4000, 'Player ID is missing in URL');
         return;
     }
 
+    const data = await verifyTokenWithAuthServer(accessToken)
+
+    if (!data) {
+        console.log('error verifying')
+        ws.close(4000, 'Error validating token.');
+        return
+    }
+    
+    ws.send(JSON.stringify({ event: 'verified' }));
+
     joinRoom(playerId);
+    console.log(`Player ${playerId} connected.`);
 
     ws.on('message', (message: WebSocket.Data) => {
         try {
